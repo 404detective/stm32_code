@@ -1,0 +1,58 @@
+int main(void)
+{
+	LED_Init();
+delay_Init();
+KEY_Init();
+TIM2_PWM_Init(899,0); //不分频,PWM 频率=72000/900=8Khz
+	
+TIM3_PWM_Init(199,7199);
+
+   	while(1)
+	{ 
+		
+		if(!S1&&pwm<199)
+		{
+			Delay_ms(10);
+			if(!S1)	
+				
+			{
+				 while(!S1);//等待按键释放
+				 pwm+=5;
+				LED2_REV;
+				TIM_SetCompare2(TIM3,pwm);
+				
+			}
+		}
+		
+		if(!S2)
+		{
+			Delay_ms(10);
+			if(!S2)	
+				
+			{
+				 while(!S2);//等待按键释放
+				 pwm=190;
+				LED2_REV;
+	TIM_SetCompare2(TIM3,pwm);
+			}
+		}
+		
+		if(!S3&&pwm>10)
+		{
+			Delay_ms(10);
+			if(!S3)	
+				
+			{
+				 while(!S3);//等待按键释放
+				 pwm-=5;
+				LED2_REV;
+				TIM_SetCompare2(TIM3,pwm);
+			}
+		}
+		
+	//	TIM_SetCompare2(TIM3,pwm);
+
+}
+
+
+}

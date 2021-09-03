@@ -1,0 +1,5 @@
+-c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork -I..\USER -I..\FWLib\inc -I..\CMSIS -I..\MY\inc -I..\BALANCE -I..\BALANCE\CONTROL -I..\BALANCE\DataScope_DP -I..\BALANCE\DMP -I..\BALANCE\filter -I..\BALANCE\IIC -I..\BALANCE\MPU6050 
+-I E:\keil\ARM\RV31\INC 
+-I E:\keil\ARM\CMSIS\Include 
+-I E:\keil\ARM\Inc\ST\STM32F10x 
+-DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\OBJ\olediic.o" --omf_browse "..\OBJ\olediic.crf" --depend "..\OBJ\olediic.d" "..\MY\c\olediic.c"

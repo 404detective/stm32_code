@@ -1,0 +1,27 @@
+int main(void)
+{
+	
+  uint8_t j; //定义变量
+	LED_Init();//LED初始化
+	The_KEY_Init();
+
+  delay_Init();//延时初始化
+	
+  while (1)
+  {
+		if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6))
+		{
+			Delay_ms(10);
+			if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6))	
+				
+			{
+				 while(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6));//等待按键释放
+				 LED2_REV;
+				
+			}
+		}
+		
+		////////////////////////////////////////////
+
+  }
+}

@@ -1,0 +1,164 @@
+/*-------------------------------------------------------------------------------
+文件名称：main.c
+文件描述：按键控制LED闪烁，S1取反LED2，S2取反LED3，S3同时取反LED2，LED3
+          S4使LED2，LED3闪烁5次
+硬件平台：尼莫M3S开发板
+编写整理：shifang
+固件库  ：V3.5
+技术论坛：www.doflye.net
+备    注：通过简单修改可以移植到其他开发板，部分资料来源于网络。
+---------------------------------------------------------------------------------*/
+#include "stm32f10x.h"
+
+#define S1 GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_4)
+#define S2 GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_3)
+#define S3 GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_2)
+#define S4 GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0)
+
+#define LED2_OFF GPIO_SetBits(GPIOE,GPIO_Pin_5)
+#define LED2_ON GPIO_ResetBits(GPIOE,GPIO_Pin_5)
+#define LED2_REV GPIO_WriteBit(GPIOE, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOE, GPIO_Pin_5))))
+
+#define LED3_OFF GPIO_SetBits(GPIOB,GPIO_Pin_5)
+#define LED3_ON GPIO_ResetBits(GPIOB,GPIO_Pin_5)
+#define LED3_REV GPIO_WriteBit(GPIOB, GPIO_Pin_5,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_5))))
+
+#define BEEP_OFF GPIO_SetBits(GPIOB,GPIO_Pin_8)
+#define BEEP_ON GPIO_ResetBits(GPIOB,GPIO_Pin_8)
+#define BEEP_REV GPIO_WriteBit(GPIOB, GPIO_Pin_8,(BitAction)(1-(GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_8))))
+
+void Delay()
+{int i;
+	for(i=0;i<0x0fffff;i++);//for循环不精确延时
+}
+void LED_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+  //打开PB口时钟
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	//打开PE口时钟
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
+	//PB5,PE5引脚设置
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+	//端口速度
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	//端口模式，此为输出推挽模式
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	//初始化对应的端口
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+  GPIO_Init(GPIOE, &GPIO_InitStructure);
+}
+
+void KEY_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+	//打开PB口时钟
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	//打开PA口时钟
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	//打开PE口时钟
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
+	//PE2,PE3,PE4引脚设置	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+	//端口速度
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+	//端口模式，此为输入上拉模式
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	//初始化对应的端口
+  GPIO_Init(GPIOE, &GPIO_InitStructure);
+	//PA0引脚设置	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+	//端口速度
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+	//端口模式，此为输入下拉模式
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+	//初始化对应的端口
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+}
+	
+
+void BEEP_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+  //打开PB口时钟
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	//PB8引脚设置
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+	//端口速度
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	//端口模式，此为输出推挽模式
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	//初始化对应的端口
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+}
+
+int main(void)
+{
+	
+  uint8_t j; //定义变量
+	LED_Init();//LED初始化
+  KEY_Init();//按键初始化
+	BEEP_Init();
+	
+  while (1)
+  {
+		if(!S1)
+		{
+			Delay();
+			if(!S1)	
+				
+			{
+				 while(!S1);//等待按键释放
+				 LED2_REV;
+				 BEEP_ON;
+				
+			}
+		}
+		
+		////////////////////////////////////////////
+		if(!S2)
+		{
+			Delay();
+			if(!S2)	
+				
+			{
+				 while(!S2);
+				 LED3_REV;
+				 BEEP_OFF;
+				
+			}
+		}
+		//////////////////////////////////////////
+		if(!S3)
+		{
+			Delay();
+			if(!S3)	
+				
+			{
+				 while(!S3);
+				 LED2_REV;
+				 LED3_REV;
+			}
+		}
+	///////////////////////////////////////////
+	 if(S4)
+		{
+			Delay();
+			if(S4)	
+				
+			{
+				 while(S4);
+				 for(j=0;j<10;j++)
+				{
+				 LED2_REV;
+				 LED3_REV;
+				 Delay();
+					Delay();
+				}
+			}
+		}
+
+  }
+}
+
+/*----------------------德飞莱 技术论坛：www.doflye.net--------------------------*/

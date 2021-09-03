@@ -1,0 +1,25 @@
+uint32_t IR_Key=0;
+uint8_t flag=0;
+uint8_t  dat=0;
+
+/*************主函数**************************/
+int main(void)
+{
+  Infrared_Config();
+	usart_Init();
+	LED_Init();
+  while(1)
+   {
+	 if(flag==1)
+	 {
+	   flag = 0;
+	   dat = (uint8_t)(IR_Key>>8);
+		 printf("%x\r\n",dat);
+      if(dat == 0x30)
+				 LED2_ON;
+			 if(dat == 0x18)
+				  LED2_OFF; 
+	 }
+	 
+   }
+}

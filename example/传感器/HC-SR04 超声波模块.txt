@@ -1,0 +1,18 @@
+int main(void)
+{	 
+    
+    float distance = 0;
+	delay_Init();	    	 //延时函数初始化	  
+
+	HCSR04_Init();
+    usart_Init();
+    while(1) 
+	{		 	
+        
+   		 //printf("%f \r\n",distance);
+		Delay_ms(1000);	
+    distance = Get_Distance();
+        printf("%f \r\n",distance);
+        
+	} 
+}

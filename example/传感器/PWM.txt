@@ -1,0 +1,58 @@
+int main(void)
+{
+
+	u16 led0pwmval=0;
+	u16 led1pwmval=0;
+	u16 led2pwmval=0;
+	u8 dir=1;
+	int i=5000;
+ 
+TIM2_PWM_Init(899,0); //不分频,PWM 频率=72000/900=8Khz
+TIM3_PWM_Init(899,0);
+ while(1)
+{
+	for(i=0;i<10000;i++);
+	//while(i--); while很暗的小灯不不动
+	if(dir)
+		led0pwmval++;
+	else
+		led0pwmval--;
+	if(led0pwmval>899)
+		dir=0;
+	if(led0pwmval==0)
+	dir=1;
+
+	TIM_SetCompare2(TIM2,led1pwmval); 
+
+	
+	for(i=0;i<10000;i++);
+	//while(i--); while很暗的小灯不不动
+	if(dir)
+		led1pwmval++;
+	else
+		led1pwmval--;
+	if(led1pwmval>899)
+		dir=0;
+	if(led1pwmval==0)
+	dir=1;
+
+	TIM_SetCompare2(TIM2,led1pwmval); 
+	TIM_SetCompare1(TIM2,led1pwmval); 
+	TIM_SetCompare2(TIM3,led0pwmval);
+	
+		for(i=0;i<10000;i++);
+	//while(i--); while很暗的小灯不不动
+	if(dir)
+		led0pwmval++;
+	else
+		led0pwmval--;
+	if(led0pwmval>899)
+		dir=0;
+	if(led0pwmval==0)
+	dir=1;
+
+	TIM_SetCompare2(TIM2,led1pwmval); 
+	TIM_SetCompare1(TIM2,led2pwmval); 
+	TIM_SetCompare2(TIM3,led0pwmval);
+}
+}

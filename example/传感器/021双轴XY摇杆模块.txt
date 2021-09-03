@@ -1,0 +1,47 @@
+// int main(void)
+// {
+// 	int i=0;
+// 	int sum=0;
+//   uint8_t j; //定义变量
+// 	LED_Init();//LED初始化
+// 	usart_Init();
+// 	The_KEY_Init();
+// 	ADC1_Init();
+//   delay_Init();//延时初始化
+
+//   while (1)
+//   {
+// 		if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6))
+// 		{
+// 			Delay_ms(1);
+// 			if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6))	
+// 				
+// 			{
+// 				 while(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6));//等待按键释放
+// 				 LED2_REV;
+// 			}
+// 			
+// 		}
+// 		for(i=0;i<3;i++)
+// 		{
+// 			sum=0;
+// 			for(j=0;j<10;j++)
+// 			{
+// 				sum+=ADC[j][i];
+// 			}
+// 			ADC_Value[i]=(float)sum/(10*4096)*3.3;//求平均值并转换成电压值
+// 			//打印（略）
+// 		}
+
+// 			//ADC_ConvertedValueLocal =(float) ADC[0][0]/4096*3.3; // 读取转换的AD值
+// 	
+// 			printf("\r\n 转换后的实际电压值 = %f V \r\n",ADC_Value[0]); 
+
+// 	
+// 			Delay_ms(1000);
+
+// 		
+// 		////////////////////////////////////////////
+
+//   }
+// }

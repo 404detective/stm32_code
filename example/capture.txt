@@ -1,0 +1,23 @@
+int main()  
+{  
+    extern u8 TIM_CAP_STA;  
+    extern u16 TIM_CAP_VAL;  
+    u32 temp = 0;  
+      
+    delay_Init(); // 初始化systick时钟  
+    KEY_Init(); // 初始化KEY_WAKEUP  
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); // 设置中断优先级分组  
+    TIM5_Cap_Init(0xFFFF, 72000-1); // 周期为65.535s  
+    usart_Init(); // 初始化串口  
+      
+    while(1)  
+    {  
+        Delay_ms(10);  
+        if((TIM_CAP_STA&0x80) == 0x80)  // 完成有效电平的捕获
+        {  
+            temp = TIM_CAP_VAL + (TIM_CAP_STA&0x3F) * 0xFFFF; // 计算脉冲持续时间  
+            printf("%d\r\n", temp); // 串口打印  
+            TIM_CAP_STA = 0; // 清空TIM_CAP_STA内的数据以便再次捕获
+        }  
+    }     
+}

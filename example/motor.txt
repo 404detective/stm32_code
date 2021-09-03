@@ -1,0 +1,60 @@
+int pwm=50;
+
+/*************主函数**************************/
+int main(void)//PA8 9 10 11
+{
+  TIM1_PWM_Init(99,719);
+	LED_Init();
+	KEY_Init();
+	delay_Init();
+  while(1)
+   {
+	if(!S1&&pwm<90)
+		{
+			Delay_ms(10);
+			if(!S1)	
+			{
+				 while(!S1);//等待按键释放
+				 pwm+=5;
+				LED2_REV;
+			}
+		}
+		
+		if(!S2)
+		{
+			Delay_ms(10);
+			if(!S2)	
+			{
+				 while(!S2);//等待按键释放
+				 pwm=50;
+				LED2_REV;
+
+			}
+		}
+		
+		if(!S3&&pwm>-90)
+		{
+			Delay_ms(10);
+			if(!S3)	
+			{
+				 while(!S3);//等待按键释放
+				 pwm-=5;
+				LED2_REV;
+
+			}
+		}
+		
+	 
+	 if (pwm > 0)
+    {
+        TIM_SetCompare1(TIM1,pwm);
+        TIM_SetCompare4(TIM1,0);
+    }
+    else
+    {
+        TIM_SetCompare1(TIM1,0);
+        TIM_SetCompare4(TIM1,-pwm);
+    }
+	 
+}
+}
